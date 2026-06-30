@@ -129,20 +129,6 @@ export function CreatorApp({ participants }: CreatorAppProps) {
   }, []);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      const stored = readStoredSubmissions();
-      const currentSlug = readCurrentSubmissionSlug();
-      const restoredSlug = currentSlug ?? stored.at(-1)?.participantSlug;
-      setSubmissions(stored);
-      setCurrentSubmissionSlug(restoredSlug ?? null);
-
-      setHydrated(true);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [participants]);
-
-  useEffect(() => {
     let isActive = true;
 
     async function loadBootstrap() {
@@ -184,7 +170,21 @@ export function CreatorApp({ participants }: CreatorAppProps) {
         }
       } catch {
         if (isActive) {
+          const stored = readStoredSubmissions();
+          const currentSlug = readCurrentSubmissionSlug();
+          const restoredSlug = currentSlug ?? stored.at(-1)?.participantSlug;
+          const participant = restoredSlug ? participants.find((item) => item.slug === restoredSlug) : null;
+          const submission = restoredSlug ? stored.find((item) => item.participantSlug === restoredSlug) : null;
+
           setDataMode("local");
+          setSubmissions(stored);
+          setCurrentSubmissionSlug(restoredSlug ?? null);
+
+          if (participant && submission) {
+            setSelected(participant);
+            setBlockedParticipant(participant);
+            hydrateFromSubmission(submission, participant);
+          }
         }
       } finally {
         if (isActive) {
