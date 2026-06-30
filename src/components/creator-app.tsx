@@ -793,11 +793,19 @@ function ProgressStrip({ activeStep }: { activeStep: number }) {
             style={{ zIndex: item }}
             transition={stageTransition}
           >
-            Шаг {item}
+            {completed ? <ProgressCheckIcon /> : <>Шаг {item}</>}
           </motion.div>
         );
       })}
     </div>
+  );
+}
+
+function ProgressCheckIcon() {
+  return (
+    <svg className="progressCheckIcon" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+      <path d="M1 3.8L4.25 7L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
@@ -926,7 +934,11 @@ function WordsStep({
 
   return (
     <StepContent>
-      <h2 className="wordsTitle">Что создаёшь? [3 слова]</h2>
+      <h2 className="wordsTitle">
+        Что создаёшь?
+        <br />
+        Твой контракт [3 слова]
+      </h2>
       <div className="wordIntro">
         <strong>Примеры:</strong>
         <p>Ответственность, Любовь, Лидерство, Значимость, Сила, Забота, Поддержка, и тд...</p>
@@ -1074,7 +1086,7 @@ function ConfirmStep({
         <div className="summaryGroup">
           <div className="summaryRow">
             <dt>Размер</dt>
-            <dd>{size}</dd>
+            <dd className="summarySizeValue">{size}</dd>
           </div>
         </div>
         <div className="summaryGroup">
