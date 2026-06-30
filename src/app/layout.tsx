@@ -11,6 +11,9 @@ const geologica = Geologica({
 export const metadata: Metadata = {
   title: "Создай свою футболку | ЛП-7",
   description: "Интерактивный конструктор именной лидерской футболки для участников ЛП-7.",
+  icons: {
+    icon: "/assets/figma/lp7-logo.svg",
+  },
 };
 
 export const viewport: Viewport = {
