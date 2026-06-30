@@ -136,17 +136,6 @@ export function CreatorApp({ participants }: CreatorAppProps) {
       setSubmissions(stored);
       setCurrentSubmissionSlug(restoredSlug ?? null);
 
-      if (restoredSlug) {
-        const participant = participants.find((item) => item.slug === restoredSlug);
-        const submission = stored.find((item) => item.participantSlug === restoredSlug);
-
-        if (participant) {
-          setSelected(participant);
-          setBlockedParticipant(participant);
-          hydrateFromSubmission(submission, participant);
-        }
-      }
-
       setHydrated(true);
     }, 0);
 
@@ -187,6 +176,11 @@ export function CreatorApp({ participants }: CreatorAppProps) {
           setSelected(currentParticipant);
           setBlockedParticipant(currentParticipant);
           hydrateFromSubmission(currentSubmission, currentParticipant);
+        } else if (currentSlug && !currentSubmission) {
+          clearAppSession();
+          setSelected(null);
+          setBlockedParticipant(null);
+          setCurrentSubmissionSlug(null);
         }
       } catch {
         if (isActive) {
