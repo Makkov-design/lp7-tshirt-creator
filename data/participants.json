@@ -1,0 +1,205 @@
+[
+  {
+    "slug": "alona-deynichenko",
+    "displayName": "Альона Дейниченко",
+    "firstName": "Альона",
+    "lastName": "Дейниченко",
+    "photoFileName": "Альона Дейниченко.jpg"
+  },
+  {
+    "slug": "alona-savosh",
+    "displayName": "Альона Савош",
+    "firstName": "Альона",
+    "lastName": "Савош",
+    "photoFileName": "Альона Савош.jpg"
+  },
+  {
+    "slug": "andrey-deynichenko",
+    "displayName": "Андрей Дейниченко",
+    "firstName": "Андрей",
+    "lastName": "Дейниченко",
+    "photoFileName": "Андрей Дейниченко.jpg"
+  },
+  {
+    "slug": "andrey-zibnitskiy",
+    "displayName": "Андрей Зибницкий",
+    "firstName": "Андрей",
+    "lastName": "Зибницкий",
+    "photoFileName": "Андрей Зибницкий.jpg"
+  },
+  {
+    "slug": "andriy-prepelitsya",
+    "displayName": "Андрій Препелиця",
+    "firstName": "Андрій",
+    "lastName": "Препелиця",
+    "photoFileName": "Андрій Препелиця.jpg"
+  },
+  {
+    "slug": "artem-anshits",
+    "displayName": "Артем Аншиц",
+    "firstName": "Артем",
+    "lastName": "Аншиц",
+    "photoFileName": "Артем Аншиц.jpg"
+  },
+  {
+    "slug": "bogdan-demidenko",
+    "displayName": "Богдан Демиденко",
+    "firstName": "Богдан",
+    "lastName": "Демиденко",
+    "photoFileName": "Богдан Демиденко.jpg"
+  },
+  {
+    "slug": "valeriya-merzlikina",
+    "displayName": "Валерия Мерзликина",
+    "firstName": "Валерия",
+    "lastName": "Мерзликина",
+    "photoFileName": "Валерия Мерзликина.jpg"
+  },
+  {
+    "slug": "valeriya-fomenko",
+    "displayName": "Валерия Фоменко",
+    "firstName": "Валерия",
+    "lastName": "Фоменко",
+    "photoFileName": "Валерия Фоменко.jpg"
+  },
+  {
+    "slug": "viktor-petrik",
+    "displayName": "Виктор Петрик",
+    "firstName": "Виктор",
+    "lastName": "Петрик",
+    "photoFileName": "Виктор Петрик.jpg"
+  },
+  {
+    "slug": "violetta-arkhipova",
+    "displayName": "Виолетта Архипова",
+    "firstName": "Виолетта",
+    "lastName": "Архипова",
+    "photoFileName": "Виолетта Архипова.jpg"
+  },
+  {
+    "slug": "vitaliy-kordin",
+    "displayName": "Виталий Кордин",
+    "firstName": "Виталий",
+    "lastName": "Кордин",
+    "photoFileName": "Виталий Кордин.jpg"
+  },
+  {
+    "slug": "vladislav-levkovich",
+    "displayName": "Владислав Левкович",
+    "firstName": "Владислав",
+    "lastName": "Левкович",
+    "photoFileName": "Владислав Левкович.jpg"
+  },
+  {
+    "slug": "vladislav-rudenko",
+    "displayName": "Владислав Руденко",
+    "firstName": "Владислав",
+    "lastName": "Руденко",
+    "photoFileName": "Владислав Руденко.jpg"
+  },
+  {
+    "slug": "darina-pluzhnikova",
+    "displayName": "Дарина Плужникова",
+    "firstName": "Дарина",
+    "lastName": "Плужникова",
+    "photoFileName": "Дарина Плужникова.jpg"
+  },
+  {
+    "slug": "dmytro-kovshovyk",
+    "displayName": "Дмитрий Ковшовик",
+    "firstName": "Дмитрий",
+    "lastName": "Ковшовик",
+    "photoFileName": "Дмитрий Ковшовик.jpg"
+  },
+  {
+    "slug": "evgeniy-zadorin",
+    "displayName": "Евгений Задорин",
+    "firstName": "Евгений",
+    "lastName": "Задорин",
+    "photoFileName": "Евгений Задорин.jpg"
+  },
+  {
+    "slug": "yevhen-goncharov",
+    "displayName": "Євген Гончаров",
+    "firstName": "Євген",
+    "lastName": "Гончаров",
+    "photoFileName": "Євген Гончаров.jpg"
+  },
+  {
+    "slug": "elizaveta-konovalova",
+    "displayName": "Елизавета Коновалова",
+    "firstName": "Елизавета",
+    "lastName": "Коновалова",
+    "photoFileName": "Елизавета Коновалова.jpg"
+  },
+  {
+    "slug": "katerina-mazur",
+    "displayName": "Катерина Мазур",
+    "firstName": "Катерина",
+    "lastName": "Мазур",
+    "photoFileName": "Катерина Мазур.jpg"
+  },
+  {
+    "slug": "konstantin-svizhak",
+    "displayName": "Константин Свіжак",
+    "firstName": "Константин",
+    "lastName": "Свіжак",
+    "photoFileName": "Константин Свіжак.jpg"
+  },
+  {
+    "slug": "maksim-ryzhkov",
+    "displayName": "Максим Рыжков",
+    "firstName": "Максим",
+    "lastName": "Рыжков",
+    "photoFileName": "Максим Рыжков.jpg"
+  },
+  {
+    "slug": "mariya-bogatchenko",
+    "displayName": "Мария Богатченко",
+    "firstName": "Мария",
+    "lastName": "Богатченко",
+    "photoFileName": "Мария Богатченко.jpg"
+  },
+  {
+    "slug": "mariya-kosyakova",
+    "displayName": "Мария Косякова",
+    "firstName": "Мария",
+    "lastName": "Косякова",
+    "photoFileName": "Мария Косякова.jpg"
+  },
+  {
+    "slug": "matviy-medorenko",
+    "displayName": "Матвій Медоренко",
+    "firstName": "Матвій",
+    "lastName": "Медоренко",
+    "photoFileName": "Матвій Медоренко.jpg"
+  },
+  {
+    "slug": "mykhailo-deynichenko",
+    "displayName": "Михайло Дейниченко",
+    "firstName": "Михайло",
+    "lastName": "Дейниченко",
+    "photoFileName": "Михайло Дейниченко.jpg"
+  },
+  {
+    "slug": "nikita-laptinov",
+    "displayName": "Никита Лаптинов",
+    "firstName": "Никита",
+    "lastName": "Лаптинов",
+    "photoFileName": "Никита Лаптинов.jpg"
+  },
+  {
+    "slug": "ruslana-kozakova",
+    "displayName": "Руслана Козакова",
+    "firstName": "Руслана",
+    "lastName": "Козакова",
+    "photoFileName": "Руслана Козакова.jpg"
+  },
+  {
+    "slug": "ella-vodopyanova",
+    "displayName": "Элла Водопьянова",
+    "firstName": "Элла",
+    "lastName": "Водопьянова",
+    "photoFileName": "Элла Водопьянова.jpg"
+  }
+]
