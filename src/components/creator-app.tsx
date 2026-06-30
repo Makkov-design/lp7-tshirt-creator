@@ -20,13 +20,18 @@ import {
   writeCurrentSubmissionSlug,
   writeStoredSubmissions,
 } from "@/lib/storage";
-import type { CreatorStep, InitialsLanguage, Participant, ShirtSize, Submission } from "@/lib/types";
+import type { BackNameDraft, CreatorStep, InitialsLanguage, Participant, ShirtSize, Submission } from "@/lib/types";
 import { initialsLanguages } from "@/lib/validation";
 
 const sizes: ShirtSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 const languages: InitialsLanguage[] = [...initialsLanguages];
 const emptyWords = ["", "", ""];
 const steps = [1, 2, 3, 4, 5];
+const emptyBackNameDrafts: Record<InitialsLanguage, BackNameDraft> = {
+  RU: { firstName: "", lastName: "" },
+  UA: { firstName: "", lastName: "" },
+  EN: { firstName: "", lastName: "" },
+};
 const maleCongratsGifs = [1, 2, 3, 8];
 const femaleCongratsGifs = [4, 5, 6, 7];
 const femaleParticipantSlugs = new Set([
@@ -87,6 +92,7 @@ export function CreatorApp({ participants }: CreatorAppProps) {
   const [size, setSize] = useState<ShirtSize | null>(null);
   const [words, setWords] = useState<string[]>(emptyWords);
   const [initialsLanguage, setInitialsLanguage] = useState<InitialsLanguage>("RU");
+  const [backNameDrafts, setBackNameDrafts] = useState<Record<InitialsLanguage, BackNameDraft>>(emptyBackNameDrafts);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [currentSubmissionSlug, setCurrentSubmissionSlug] = useState<string | null>(null);
   const [blockedParticipant, setBlockedParticipant] = useState<Participant | null>(null);
@@ -112,6 +118,7 @@ export function CreatorApp({ participants }: CreatorAppProps) {
       setSize(null);
       setWords(emptyWords);
       setInitialsLanguage("RU");
+      setBackNameDrafts(emptyBackNameDrafts);
       setSubmissions([]);
       setCurrentSubmissionSlug(null);
       setBlockedParticipant(null);
@@ -212,15 +219,29 @@ export function CreatorApp({ participants }: CreatorAppProps) {
   const isBlockedSubmission = Boolean(blockedParticipant && !canEditCurrentSubmission);
   const activeStep = getActiveStep(step, isBlockedSubmission);
   const selectedBackNamePath = selected ? getBackNameAssetPath(selected, initialsLanguage) : "";
+  const selectedBackNameDraft = backNameDrafts[initialsLanguage];
+  const selectedBackNameText = formatBackNameDraft(selectedBackNameDraft);
   const completeSuccessConfetti = useCallback(() => setShowSuccessConfetti(false), []);
   const canContinueWords = words.every((word) => word.trim().length > 0);
-  const canConfirm = Boolean(selected && size && canContinueWords);
+  const canContinueBackName = Boolean(selectedBackNameDraft.firstName.trim() && selectedBackNameDraft.lastName.trim());
+  const canConfirm = Boolean(selected && size && canContinueWords && canContinueBackName);
 
   function hydrateFromSubmission(submission: Submission | undefined | null, participant: Participant) {
     setSize(submission?.size ?? null);
     setWords(submission?.words ?? emptyWords);
     setInitialsLanguage(submission?.initialsLanguage ?? "RU");
+    setBackNameDrafts(createBackNameDrafts(participant, submission));
     setQuery(participant.displayName);
+  }
+
+  function updateBackNameDraft(field: keyof BackNameDraft, value: string) {
+    setBackNameDrafts((current) => ({
+      ...current,
+      [initialsLanguage]: {
+        ...current[initialsLanguage],
+        [field]: value,
+      },
+    }));
   }
 
   function startFlow() {
@@ -269,6 +290,9 @@ export function CreatorApp({ participants }: CreatorAppProps) {
       words: [words[0].trim(), words[1].trim(), words[2].trim()],
       initialsLanguage,
       backNameAssetPath: selectedBackNamePath,
+      backNameFirstName: selectedBackNameDraft.firstName.trim(),
+      backNameLastName: selectedBackNameDraft.lastName.trim(),
+      backNameText: selectedBackNameText,
       createdAt: new Date().toISOString(),
     };
 
@@ -345,6 +369,27 @@ export function CreatorApp({ participants }: CreatorAppProps) {
     setStep("size");
   }
 
+  function goToInitialsStep() {
+    const shouldResetMobileViewport = window.matchMedia("(max-width: 899px)").matches;
+
+    if (shouldResetMobileViewport && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    setStep("initials");
+
+    if (!shouldResetMobileViewport) {
+      return;
+    }
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.requestAnimationFrame(() => {
+      scrollToTop();
+      window.setTimeout(scrollToTop, 220);
+    });
+  }
+
   return (
     <MotionConfig reducedMotion="user">
       <main className="flowApp">
@@ -373,8 +418,7 @@ export function CreatorApp({ participants }: CreatorAppProps) {
                       size={size}
                       words={words}
                       participant={selected}
-                      initialsLanguage={initialsLanguage}
-                      backNameAssetPath={selectedBackNamePath}
+                      backNameDraft={selectedBackNameDraft}
                     />
 
                     <section className="flowCard" aria-label="Конструктор футболки">
@@ -408,7 +452,7 @@ export function CreatorApp({ participants }: CreatorAppProps) {
                             words={words}
                             onWordsChange={setWords}
                             onBack={() => setStep("size")}
-                            onNext={() => setStep("initials")}
+                            onNext={goToInitialsStep}
                           />
                         ) : null}
 
@@ -416,7 +460,9 @@ export function CreatorApp({ participants }: CreatorAppProps) {
                           <InitialsStep
                             key="initials"
                             language={initialsLanguage}
+                            backNameDraft={selectedBackNameDraft}
                             onLanguageChange={setInitialsLanguage}
+                            onBackNameChange={updateBackNameDraft}
                             onBack={() => setStep("words")}
                             onNext={() => setStep("confirm")}
                           />
@@ -429,6 +475,7 @@ export function CreatorApp({ participants }: CreatorAppProps) {
                             size={size}
                             words={words}
                             initialsLanguage={initialsLanguage}
+                            backNameText={selectedBackNameText}
                             isSubmitting={isSubmitting}
                             canConfirm={canConfirm}
                             errorMessage={errorMessage}
@@ -673,15 +720,13 @@ function TShirtStage({
   size,
   words,
   participant,
-  initialsLanguage,
-  backNameAssetPath,
+  backNameDraft,
 }: {
   step: CreatorStep;
   size: ShirtSize | null;
   words: string[];
   participant: Participant | null;
-  initialsLanguage: InitialsLanguage;
-  backNameAssetPath: string;
+  backNameDraft: BackNameDraft;
 }) {
   const variant = getStageVariant(step);
   const showFrontWords = step === "words";
@@ -728,7 +773,7 @@ function TShirtStage({
         </div>
       ) : null}
       {showBackName && participant ? (
-        <BackNameMark participant={participant} language={initialsLanguage} assetPath={backNameAssetPath} />
+        <BackNameMark draft={backNameDraft} />
       ) : null}
     </motion.section>
   );
@@ -923,12 +968,16 @@ function WordsStep({
 
 function InitialsStep({
   language,
+  backNameDraft,
   onLanguageChange,
+  onBackNameChange,
   onBack,
   onNext,
 }: {
   language: InitialsLanguage;
+  backNameDraft: BackNameDraft;
   onLanguageChange: (language: InitialsLanguage) => void;
+  onBackNameChange: (field: keyof BackNameDraft, value: string) => void;
   onBack: () => void;
   onNext: () => void;
 }) {
@@ -938,11 +987,11 @@ function InitialsStep({
       <p className="initialsDescription">
         Всё уже продумано 👌, выбери только на каком языке ты хочешь надпись и верно ли написано имя. На выбор 3 опции:
       </p>
-      <div className="languageSwitch" aria-label="Язык инициалов">
+      <div className="languageBadges" aria-label="Язык надписи на спине">
         {languages.map((item) => (
           <button
             key={item}
-            className={language === item ? "languageButton selected" : "languageButton"}
+            className={language === item ? "languageBadge selected" : "languageBadge"}
             type="button"
             onClick={() => onLanguageChange(item)}
           >
@@ -950,6 +999,25 @@ function InitialsStep({
           </button>
         ))}
       </div>
+      <div className="backNameFields">
+        <label>
+          <span>Имя</span>
+          <input
+            value={backNameDraft.firstName}
+            maxLength={40}
+            onChange={(event) => onBackNameChange("firstName", event.target.value)}
+          />
+        </label>
+        <label>
+          <span>Фамилия</span>
+          <input
+            value={backNameDraft.lastName}
+            maxLength={40}
+            onChange={(event) => onBackNameChange("lastName", event.target.value)}
+          />
+        </label>
+      </div>
+      <p className="languagePreviewNote">Смотри на футболку сверху: надпись меняется сразу после выбора языка.</p>
       <StepButtons>
         <BackButton onClick={onBack} />
         <PrimaryAction onClick={onNext}>
@@ -975,6 +1043,7 @@ function ConfirmStep({
   size,
   words,
   initialsLanguage,
+  backNameText,
   isSubmitting,
   canConfirm,
   errorMessage,
@@ -985,6 +1054,7 @@ function ConfirmStep({
   size: ShirtSize;
   words: string[];
   initialsLanguage: InitialsLanguage;
+  backNameText: string;
   isSubmitting: boolean;
   canConfirm: boolean;
   errorMessage: string;
@@ -996,6 +1066,10 @@ function ConfirmStep({
       <h2>Итоговая проверка</h2>
       <dl className="summaryList">
         <div>
+          <dt>Имя лидера</dt>
+          <dd>{participant.displayName}</dd>
+        </div>
+        <div>
           <dt>Размер</dt>
           <dd>{size}</dd>
         </div>
@@ -1006,12 +1080,12 @@ function ConfirmStep({
           </div>
         ))}
         <div>
-          <dt>Имя лидера</dt>
-          <dd>{participant.displayName}</dd>
-        </div>
-        <div>
           <dt>Язык инициалов (спина)</dt>
           <dd>{initialsLanguage}</dd>
+        </div>
+        <div>
+          <dt>Надпись на спине</dt>
+          <dd>{backNameText}</dd>
         </div>
       </dl>
       <StepButtons>
@@ -1232,20 +1306,13 @@ function FilledWarningIcon() {
   );
 }
 
-function BackNameMark({
-  participant,
-  language,
-  assetPath,
-}: {
-  participant: Participant;
-  language: InitialsLanguage;
-  assetPath: string;
-}) {
-  const backNameText = getBackNameText(participant, language);
-
+function BackNameMark({ draft }: { draft: BackNameDraft }) {
   return (
     <div className="backNameMark">
-      <img key={assetPath} src={assetPath} alt={backNameText} />
+      <div className="backNameMarkText" aria-label={formatBackNameDraft(draft)}>
+        <span>{draft.firstName}</span>
+        <span>{draft.lastName}</span>
+      </div>
     </div>
   );
 }
@@ -1301,6 +1368,35 @@ function getBackNameText(participant: Participant, language: InitialsLanguage) {
   }
 
   return `${participant.firstName} ${participant.lastName}`;
+}
+
+function createBackNameDrafts(participant: Participant, submission?: Submission | null) {
+  const drafts = languages.reduce((current, language) => {
+    current[language] = splitBackNameText(getBackNameText(participant, language));
+    return current;
+  }, {} as Record<InitialsLanguage, BackNameDraft>);
+
+  if (submission?.backNameFirstName || submission?.backNameLastName) {
+    drafts[submission.initialsLanguage] = {
+      firstName: submission.backNameFirstName || drafts[submission.initialsLanguage].firstName,
+      lastName: submission.backNameLastName || drafts[submission.initialsLanguage].lastName,
+    };
+  }
+
+  return drafts;
+}
+
+function splitBackNameText(value: string): BackNameDraft {
+  const parts = value.trim().split(/\s+/).filter(Boolean);
+
+  return {
+    firstName: parts[0] ?? "",
+    lastName: parts.slice(1).join(" "),
+  };
+}
+
+function formatBackNameDraft(draft: BackNameDraft) {
+  return [draft.firstName.trim(), draft.lastName.trim()].filter(Boolean).join(" ");
 }
 
 function transliterate(value: string) {

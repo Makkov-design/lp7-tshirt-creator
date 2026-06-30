@@ -10,6 +10,11 @@ export type Participant = {
 export type ShirtSize = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL";
 export type InitialsLanguage = "RU" | "UA" | "EN";
 
+export type BackNameDraft = {
+  firstName: string;
+  lastName: string;
+};
+
 export type Submission = {
   participantSlug: string;
   firstName: string;
@@ -18,6 +23,9 @@ export type Submission = {
   words: [string, string, string];
   initialsLanguage: InitialsLanguage;
   backNameAssetPath: string;
+  backNameFirstName: string;
+  backNameLastName: string;
+  backNameText: string;
   createdAt: string;
 };
 

@@ -20,10 +20,13 @@ type SubmissionRow = {
   word_3: string;
   initials_language?: Submission["initialsLanguage"] | null;
   back_name_asset_path?: string | null;
+  back_name_first_name?: string | null;
+  back_name_last_name?: string | null;
+  back_name_text?: string | null;
 };
 
 const legacySubmissionSelect = "created_at, participant_id, first_name, last_name, size, word_1, word_2, word_3";
-const personalizedSubmissionSelect = `${legacySubmissionSelect}, initials_language, back_name_asset_path`;
+const personalizedSubmissionSelect = `${legacySubmissionSelect}, initials_language, back_name_asset_path, back_name_first_name, back_name_last_name, back_name_text`;
 
 function mapSubmission(row: SubmissionRow, participantSlug: string): Submission {
   return {
@@ -34,20 +37,43 @@ function mapSubmission(row: SubmissionRow, participantSlug: string): Submission 
     words: [row.word_1, row.word_2, row.word_3],
     initialsLanguage: row.initials_language ?? "RU",
     backNameAssetPath: row.back_name_asset_path ?? "",
+    backNameFirstName: row.back_name_first_name ?? row.first_name,
+    backNameLastName: row.back_name_last_name ?? row.last_name,
+    backNameText: row.back_name_text ?? `${row.first_name} ${row.last_name}`,
     createdAt: row.created_at,
   };
 }
 
 function isPersonalizationSchemaError(error: { code?: string; message?: string; details?: string; hint?: string } | null | undefined) {
   const text = `${error?.message ?? ""} ${error?.details ?? ""} ${error?.hint ?? ""}`.toLowerCase();
-  return error?.code === "42703" || error?.code === "PGRST204" || text.includes("initials_language") || text.includes("back_name_asset_path");
+  return (
+    error?.code === "42703" ||
+    error?.code === "PGRST204" ||
+    text.includes("initials_language") ||
+    text.includes("back_name_asset_path") ||
+    text.includes("back_name_first_name") ||
+    text.includes("back_name_last_name") ||
+    text.includes("back_name_text")
+  );
 }
 
-function withInputPersonalization(submission: Submission, input: { initialsLanguage: Submission["initialsLanguage"]; backNameAssetPath: string }) {
+function withInputPersonalization(
+  submission: Submission,
+  input: {
+    initialsLanguage: Submission["initialsLanguage"];
+    backNameAssetPath: string;
+    backNameFirstName: string;
+    backNameLastName: string;
+    backNameText: string;
+  },
+) {
   return {
     ...submission,
     initialsLanguage: input.initialsLanguage,
     backNameAssetPath: input.backNameAssetPath,
+    backNameFirstName: input.backNameFirstName,
+    backNameLastName: input.backNameLastName,
+    backNameText: input.backNameText,
   };
 }
 
@@ -115,6 +141,9 @@ export async function POST(request: Request) {
     word_3: input.words[2],
     initials_language: input.initialsLanguage,
     back_name_asset_path: input.backNameAssetPath,
+    back_name_first_name: input.backNameFirstName,
+    back_name_last_name: input.backNameLastName,
+    back_name_text: input.backNameText,
     client_submission_id: input.clientSubmissionId,
   };
 
@@ -196,6 +225,9 @@ export async function PATCH(request: Request) {
     word_3: input.words[2],
     initials_language: input.initialsLanguage,
     back_name_asset_path: input.backNameAssetPath,
+    back_name_first_name: input.backNameFirstName,
+    back_name_last_name: input.backNameLastName,
+    back_name_text: input.backNameText,
   };
 
   let { data: updated, error: updateError } = await supabase

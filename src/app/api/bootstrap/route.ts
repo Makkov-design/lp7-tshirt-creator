@@ -24,14 +24,25 @@ type SubmissionRow = {
   word_3: string;
   initials_language?: Submission["initialsLanguage"] | null;
   back_name_asset_path?: string | null;
+  back_name_first_name?: string | null;
+  back_name_last_name?: string | null;
+  back_name_text?: string | null;
 };
 
 const legacySubmissionSelect = "created_at, participant_id, first_name, last_name, size, word_1, word_2, word_3";
-const personalizedSubmissionSelect = `${legacySubmissionSelect}, initials_language, back_name_asset_path`;
+const personalizedSubmissionSelect = `${legacySubmissionSelect}, initials_language, back_name_asset_path, back_name_first_name, back_name_last_name, back_name_text`;
 
 function isPersonalizationSchemaError(error: { code?: string; message?: string; details?: string; hint?: string } | null | undefined) {
   const text = `${error?.message ?? ""} ${error?.details ?? ""} ${error?.hint ?? ""}`.toLowerCase();
-  return error?.code === "42703" || error?.code === "PGRST204" || text.includes("initials_language") || text.includes("back_name_asset_path");
+  return (
+    error?.code === "42703" ||
+    error?.code === "PGRST204" ||
+    text.includes("initials_language") ||
+    text.includes("back_name_asset_path") ||
+    text.includes("back_name_first_name") ||
+    text.includes("back_name_last_name") ||
+    text.includes("back_name_text")
+  );
 }
 
 export async function GET() {
@@ -93,6 +104,9 @@ export async function GET() {
       words: [submission.word_1, submission.word_2, submission.word_3],
       initialsLanguage: submission.initials_language ?? "RU",
       backNameAssetPath: submission.back_name_asset_path ?? "",
+      backNameFirstName: submission.back_name_first_name ?? submission.first_name,
+      backNameLastName: submission.back_name_last_name ?? submission.last_name,
+      backNameText: submission.back_name_text ?? `${submission.first_name} ${submission.last_name}`,
       createdAt: submission.created_at,
     }));
 

@@ -26,6 +26,9 @@ create table if not exists public.submissions (
   word_3 text not null,
   initials_language text not null default 'RU' check (initials_language in ('RU', 'UA', 'EN')),
   back_name_asset_path text,
+  back_name_first_name text,
+  back_name_last_name text,
+  back_name_text text,
   client_submission_id text
 );
 

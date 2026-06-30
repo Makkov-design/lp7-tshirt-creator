@@ -457,17 +457,20 @@ img {
   height: 230px;
   display: grid;
   place-items: center;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(-6deg);
 }
 
-.backNameMark img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.backNameMark img:not([src]),
-.backNameMark img[src=""] {
-  display: none;
+.backNameMarkText {
+  display: grid;
+  justify-items: center;
+  color: var(--gold);
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 31px;
+  font-weight: 600;
+  line-height: 1.16;
+  text-align: center;
+  text-shadow: 0 1px 10px rgb(0 0 0 / 26%);
+  white-space: nowrap;
 }
 
 .flowCard {
@@ -838,25 +841,70 @@ img {
   margin-bottom: 8px;
 }
 
-.languageSwitch {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+.languageBadges {
+  display: flex;
+  gap: 6px;
+  padding: 0 8px;
 }
 
-.languageButton {
-  height: 56px;
+.languageBadge {
+  height: 32px;
+  min-width: 58px;
+  padding: 0 14px;
   border: 1px solid rgba(204, 204, 204, 0.15);
-  border-radius: 14px;
+  border-radius: 999px;
   background: #111111;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 14px;
+  line-height: 1;
 }
 
-.languageButton.selected {
+.languageBadge.selected {
   background: var(--text);
   color: var(--ink);
+}
+
+.backNameFields {
+  display: grid;
+  gap: 8px;
+}
+
+.backNameFields label {
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: rgba(36, 36, 36, 0.64);
+  color: var(--text);
+}
+
+.backNameFields span {
+  color: rgba(204, 204, 204, 0.44);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.backNameFields input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.languagePreviewNote {
+  margin: -4px 0 0;
+  padding: 0 8px;
+  color: rgba(204, 204, 204, 0.42);
+  font-size: 14px;
+  line-height: 1.25;
 }
 
 .telegramHint {

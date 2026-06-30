@@ -53,6 +53,9 @@ export type Database = {
           word_3: string;
           initials_language: "RU" | "UA" | "EN";
           back_name_asset_path: string | null;
+          back_name_first_name: string | null;
+          back_name_last_name: string | null;
+          back_name_text: string | null;
           client_submission_id: string | null;
         };
         Insert: {
@@ -67,6 +70,9 @@ export type Database = {
           word_3: string;
           initials_language?: "RU" | "UA" | "EN";
           back_name_asset_path?: string | null;
+          back_name_first_name?: string | null;
+          back_name_last_name?: string | null;
+          back_name_text?: string | null;
           client_submission_id?: string | null;
         };
         Update: {
@@ -78,6 +84,9 @@ export type Database = {
           word_3?: string;
           initials_language?: "RU" | "UA" | "EN";
           back_name_asset_path?: string | null;
+          back_name_first_name?: string | null;
+          back_name_last_name?: string | null;
+          back_name_text?: string | null;
           client_submission_id?: string | null;
         };
         Relationships: [
