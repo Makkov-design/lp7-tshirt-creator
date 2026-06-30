@@ -954,14 +954,24 @@ img {
   display: grid;
   gap: 0;
   margin: 0;
+  padding: 0 8px;
 }
 
-.summaryList div {
+.summaryGroup {
+  display: grid;
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(204, 204, 204, 0.08);
+}
+
+.summaryGroup:last-child {
+  border-bottom: 0;
+}
+
+.summaryRow {
   min-height: 48px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  border-bottom: 1px dashed rgba(204, 204, 204, 0.08);
 }
 
 .summaryList dt {

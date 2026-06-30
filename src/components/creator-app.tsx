@@ -1065,27 +1065,35 @@ function ConfirmStep({
     <StepContent>
       <h2>Итоговая проверка</h2>
       <dl className="summaryList">
-        <div>
-          <dt>Имя лидера</dt>
-          <dd>{participant.displayName}</dd>
-        </div>
-        <div>
-          <dt>Размер</dt>
-          <dd>{size}</dd>
-        </div>
-        {words.map((word, index) => (
-          <div key={`${index}-${word}`}>
-            <dt>Слово #{index + 1}</dt>
-            <dd>{word}</dd>
+        <div className="summaryGroup">
+          <div className="summaryRow">
+            <dt>Имя лидера</dt>
+            <dd>{participant.displayName}</dd>
           </div>
-        ))}
-        <div>
-          <dt>Язык инициалов (спина)</dt>
-          <dd>{initialsLanguage}</dd>
         </div>
-        <div>
-          <dt>Надпись на спине</dt>
-          <dd>{backNameText}</dd>
+        <div className="summaryGroup">
+          <div className="summaryRow">
+            <dt>Размер</dt>
+            <dd>{size}</dd>
+          </div>
+        </div>
+        <div className="summaryGroup">
+          {words.map((word, index) => (
+            <div className="summaryRow" key={`${index}-${word}`}>
+              <dt>Слово #{index + 1}</dt>
+              <dd>{word}</dd>
+            </div>
+          ))}
+        </div>
+        <div className="summaryGroup">
+          <div className="summaryRow">
+            <dt>Язык инициалов (спина)</dt>
+            <dd>{initialsLanguage}</dd>
+          </div>
+          <div className="summaryRow">
+            <dt>Надпись на спине</dt>
+            <dd>{backNameText}</dd>
+          </div>
         </div>
       </dl>
       <StepButtons>
