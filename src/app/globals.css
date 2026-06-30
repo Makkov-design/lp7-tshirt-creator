@@ -1193,9 +1193,29 @@ img {
   }
 
   .flowCard,
-  .readinessCard,
   .flowStackTelegramHint {
     grid-column: 2;
+  }
+
+  .readinessCard {
+    grid-column: 1 / -1;
+    gap: 20px;
+  }
+
+  .readinessMeta {
+    min-height: auto;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: end;
+    padding: 20px 24px 0;
+  }
+
+  .sizeChips {
+    justify-self: end;
+    overflow: visible;
+  }
+
+  .readinessListTrack {
+    grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
   }
 }
 
